@@ -1,0 +1,21 @@
+{
+  "name": "propertysim",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run build:client && tsx watch src/node-server.ts",
+    "build:client": "vite build --mode client",
+    "build": "npm run build:client && vite build",
+    "preview": "wrangler pages dev ./dist"
+  },
+  "dependencies": {
+    "hono": "^4",
+    "playwright": "^1.60.0"
+  },
+  "devDependencies": {
+    "@hono/node-server": "^1.19.14",
+    "@hono/vite-cloudflare-pages": "^0.4",
+    "tsx": "^4.22.4",
+    "typescript": "^5",
+    "vite": "^5"
+  }
+}
