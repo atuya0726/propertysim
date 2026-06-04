@@ -51,9 +51,23 @@ app.get("/", (c) => {
   <meta name="twitter:title" content="不動産投資シミュレーター" />
   <meta name="twitter:description" content="月次CF・節税・売却まで無料で試算できる不動産投資シミュレーター。" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "不動産投資シミュレーター",
+    "description": "物件価格・金利・利回り・築年数などを入力するだけで、月次キャッシュフロー・節税効果・売却時の譲渡税まで即時にシミュレーションできる無料ツールです。",
+    "applicationCategory": "FinanceApplication",
+    "operatingSystem": "All",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
+    "inLanguage": "ja"
+  }
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
-  <script src="/assets/client.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+  <script defer src="/assets/client.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
   <style>
     [x-cloak] { display: none !important; }
@@ -129,26 +143,14 @@ app.get("/", (c) => {
     }
   </style>
 </head>
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebApplication",
-  "name": "不動産投資シミュレーター",
-  "description": "物件価格・金利・利回り・築年数などを入力するだけで、月次キャッシュフロー・節税効果・売却時の譲渡税まで即時にシミュレーションできる無料ツールです。",
-  "applicationCategory": "FinanceApplication",
-  "operatingSystem": "All",
-  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "JPY" },
-  "inLanguage": "ja"
-}
-</script>
 <body x-data="simApp()" x-cloak>
 
-<div class="max-w-7xl mx-auto px-6 py-10">
+<main class="max-w-7xl mx-auto px-6 py-10">
 
   <div class="mb-8">
     <h1 class="text-xl font-bold tracking-tight text-slate-900">不動産投資シミュレーター</h1>
-    <p class="text-sm text-slate-400 mt-1">数値を調整すると結果がリアルタイムに更新されます</p>
-    <p class="text-xs text-slate-400 mt-1.5">表示される数値はすべて概算です。実際の収支・税額は物件・税制・市場環境により異なります。投資判断は専門家にご確認ください。</p>
+    <p class="text-sm text-slate-500 mt-1">数値を調整すると結果がリアルタイムに更新されます</p>
+    <p class="text-xs text-slate-500 mt-1.5">表示される数値はすべて概算です。実際の収支・税額は物件・税制・市場環境により異なります。投資判断は専門家にご確認ください。</p>
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
@@ -157,187 +159,187 @@ app.get("/", (c) => {
     <div class="lg:col-span-1 bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-4">
 
       <div class="flex items-center gap-3">
-        <span class="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 whitespace-nowrap">物件・ローン条件</span>
-        <div class="flex-1 h-px bg-slate-100"></div>
+        <span class="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-500 whitespace-nowrap">物件・ローン条件</span>
+        <div class="flex-1 h-px bg-slate-100" aria-hidden="true"></div>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">物件価格</label>
+          <label for="propertyPrice" class="text-xs text-slate-500">物件価格</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="100" x-model.number="inp.propertyPrice" @change="update()" class="ni ni-lg" />
-            <span class="text-xs text-slate-400 w-6">万円</span>
+            <input id="propertyPrice" type="number" step="100" x-model.number="inp.propertyPrice" @change="update()" class="ni ni-lg" />
+            <span class="text-xs text-slate-500 w-6">万円</span>
           </div>
         </div>
-        <input type="range" min="500" max="10000" step="100" x-model.number="inp.propertyPrice" @input="update()" />
+        <input type="range" min="500" max="10000" step="100" x-model.number="inp.propertyPrice" @input="update()" aria-label="物件価格" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">自己資金（頭金）</label>
+          <label for="equity" class="text-xs text-slate-500">自己資金（頭金）</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="50" x-model.number="inp.equity" @change="update()" class="ni ni-lg" />
-            <span class="text-xs text-slate-400 w-6">万円</span>
+            <input id="equity" type="number" step="50" x-model.number="inp.equity" @change="update()" class="ni ni-lg" />
+            <span class="text-xs text-slate-500 w-6">万円</span>
           </div>
         </div>
-        <input type="range" min="0" max="3000" step="50" x-model.number="inp.equity" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">初期投資総額 <span class="font-semibold text-slate-600" x-text="(inp.equity + inp.propertyPrice * inp.acquisitionExpenseRate / 100).toFixed(0)"></span> 万円</p>
+        <input type="range" min="0" max="3000" step="50" x-model.number="inp.equity" @input="update()" aria-label="自己資金（頭金）" />
+        <p class="text-[11px] text-slate-500 text-right">初期投資総額 <span class="font-semibold text-slate-600" x-text="(inp.equity + inp.propertyPrice * inp.acquisitionExpenseRate / 100).toFixed(0)"></span> 万円</p>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">取得諸費用率</label>
+          <label for="acquisitionExpenseRate" class="text-xs text-slate-500">取得諸費用率</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.5" min="0" x-model.number="inp.acquisitionExpenseRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="acquisitionExpenseRate" type="number" step="0.5" min="0" x-model.number="inp.acquisitionExpenseRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="3" max="12" step="0.5" x-model.number="inp.acquisitionExpenseRate" @input="update()" />
+        <input type="range" min="3" max="12" step="0.5" x-model.number="inp.acquisitionExpenseRate" @input="update()" aria-label="取得諸費用率" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">金利</label>
+          <label for="interestRate" class="text-xs text-slate-500">金利</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.05" min="0.1" max="10" x-model.number="inp.interestRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="interestRate" type="number" step="0.05" min="0.1" max="10" x-model.number="inp.interestRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="0.1" max="5.0" step="0.05" x-model.number="inp.interestRate" @input="update()" />
+        <input type="range" min="0.1" max="5.0" step="0.05" x-model.number="inp.interestRate" @input="update()" aria-label="金利" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">借入期間</label>
+          <label for="loanYears" class="text-xs text-slate-500">借入期間</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="1" min="1" max="50" x-model.number="inp.loanYears" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">年</span>
+            <input id="loanYears" type="number" step="1" min="1" max="50" x-model.number="inp.loanYears" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">年</span>
           </div>
         </div>
-        <input type="range" min="1" max="35" step="1" x-model.number="inp.loanYears" @input="update()" />
+        <input type="range" min="1" max="35" step="1" x-model.number="inp.loanYears" @input="update()" aria-label="借入期間" />
       </div>
 
       <div class="flex items-center gap-3 pt-1">
-        <span class="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 whitespace-nowrap">賃料・収支条件</span>
-        <div class="flex-1 h-px bg-slate-100"></div>
+        <span class="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-500 whitespace-nowrap">賃料・収支条件</span>
+        <div class="flex-1 h-px bg-slate-100" aria-hidden="true"></div>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">表面利回り</label>
+          <label for="grossYield" class="text-xs text-slate-500">表面利回り</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.1" min="0.1" max="50" x-model.number="inp.grossYield" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="grossYield" type="number" step="0.1" min="0.1" max="50" x-model.number="inp.grossYield" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="1" max="20" step="0.1" x-model.number="inp.grossYield" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">月額家賃 <span class="font-semibold text-slate-600" x-text="(inp.propertyPrice * inp.grossYield / 100 / 12).toFixed(2)"></span> 万円</p>
+        <input type="range" min="1" max="20" step="0.1" x-model.number="inp.grossYield" @input="update()" aria-label="表面利回り" />
+        <p class="text-[11px] text-slate-500 text-right">月額家賃 <span class="font-semibold text-slate-600" x-text="(inp.propertyPrice * inp.grossYield / 100 / 12).toFixed(2)"></span> 万円</p>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">空室率</label>
+          <label for="vacancyRate" class="text-xs text-slate-500">空室率</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="1" min="0" max="100" x-model.number="inp.vacancyRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="vacancyRate" type="number" step="1" min="0" max="100" x-model.number="inp.vacancyRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="0" max="30" step="1" x-model.number="inp.vacancyRate" @input="update()" />
+        <input type="range" min="0" max="30" step="1" x-model.number="inp.vacancyRate" @input="update()" aria-label="空室率" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">家賃下落率</label>
+          <label for="rentDeclineRate" class="text-xs text-slate-500">家賃下落率</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.1" min="0" max="10" x-model.number="inp.rentDeclineRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-8">%/年</span>
+            <input id="rentDeclineRate" type="number" step="0.1" min="0" max="10" x-model.number="inp.rentDeclineRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-8">%/年</span>
           </div>
         </div>
-        <input type="range" min="0" max="3" step="0.1" x-model.number="inp.rentDeclineRate" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">
+        <input type="range" min="0" max="3" step="0.1" x-model.number="inp.rentDeclineRate" @input="update()" aria-label="家賃下落率" />
+        <p class="text-[11px] text-slate-500 text-right">
           <span x-text="inp.sellYear"></span>年後 <span class="font-semibold text-slate-600" x-text="(inp.propertyPrice * inp.grossYield / 100 / 12 * (1 - inp.vacancyRate / 100) * Math.pow(1 - inp.rentDeclineRate / 100, inp.sellYear)).toFixed(2)"></span> 万円/月
         </p>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">管理委託費率</label>
+          <label for="managementFeeRate" class="text-xs text-slate-500">管理委託費率</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.5" min="0" max="30" x-model.number="inp.managementFeeRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="managementFeeRate" type="number" step="0.5" min="0" max="30" x-model.number="inp.managementFeeRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="0" max="15" step="0.5" x-model.number="inp.managementFeeRate" @input="update()" />
+        <input type="range" min="0" max="15" step="0.5" x-model.number="inp.managementFeeRate" @input="update()" aria-label="管理委託費率" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">固定資産税・都市計画税</label>
+          <label for="propertyTax" class="text-xs text-slate-500">固定資産税・都市計画税</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="1" min="0" x-model.number="inp.propertyTax" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-8">万/年</span>
+            <input id="propertyTax" type="number" step="1" min="0" x-model.number="inp.propertyTax" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-8">万/年</span>
           </div>
         </div>
-        <input type="range" min="0" max="50" step="1" x-model.number="inp.propertyTax" @input="update()" />
+        <input type="range" min="0" max="50" step="1" x-model.number="inp.propertyTax" @input="update()" aria-label="固定資産税・都市計画税" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">火災保険料</label>
+          <label for="insurance" class="text-xs text-slate-500">火災保険料</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.5" min="0" x-model.number="inp.insurance" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-8">万/年</span>
+            <input id="insurance" type="number" step="0.5" min="0" x-model.number="inp.insurance" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-8">万/年</span>
           </div>
         </div>
-        <input type="range" min="0" max="20" step="0.5" x-model.number="inp.insurance" @input="update()" />
+        <input type="range" min="0" max="20" step="0.5" x-model.number="inp.insurance" @input="update()" aria-label="火災保険料" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">その他経費率</label>
+          <label for="otherExpenseRate" class="text-xs text-slate-500">その他経費率</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.5" min="0" max="30" x-model.number="inp.otherExpenseRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="otherExpenseRate" type="number" step="0.5" min="0" max="30" x-model.number="inp.otherExpenseRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="0" max="15" step="0.5" x-model.number="inp.otherExpenseRate" @input="update()" />
+        <input type="range" min="0" max="15" step="0.5" x-model.number="inp.otherExpenseRate" @input="update()" aria-label="その他経費率" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">修繕積立金</label>
+          <label for="monthlyRepairReserve" class="text-xs text-slate-500">修繕積立金</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.1" min="0" max="20" x-model.number="inp.monthlyRepairReserve" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-8">万/月</span>
+            <input id="monthlyRepairReserve" type="number" step="0.1" min="0" max="20" x-model.number="inp.monthlyRepairReserve" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-8">万/月</span>
           </div>
         </div>
-        <input type="range" min="0" max="5" step="0.1" x-model.number="inp.monthlyRepairReserve" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">修繕発生時に積立残高から充当（税控除対象外）</p>
+        <input type="range" min="0" max="5" step="0.1" x-model.number="inp.monthlyRepairReserve" @input="update()" aria-label="修繕積立金" />
+        <p class="text-[11px] text-slate-500 text-right">修繕発生時に積立残高から充当（税控除対象外）</p>
       </div>
 
       <div class="flex items-center gap-3 pt-1">
-        <span class="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-400 whitespace-nowrap">税・申告・出口条件</span>
-        <div class="flex-1 h-px bg-slate-100"></div>
+        <span class="text-[10px] font-bold tracking-[0.18em] uppercase text-slate-500 whitespace-nowrap">税・申告・出口条件</span>
+        <div class="flex-1 h-px bg-slate-100" aria-hidden="true"></div>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">年収（給与所得者）</label>
+          <label for="annualIncome" class="text-xs text-slate-500">年収（給与所得者）</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="100" min="100" x-model.number="inp.annualIncome" @change="update()" class="ni ni-lg" />
-            <span class="text-xs text-slate-400 w-6">万円</span>
+            <input id="annualIncome" type="number" step="100" min="100" x-model.number="inp.annualIncome" @change="update()" class="ni ni-lg" />
+            <span class="text-xs text-slate-500 w-6">万円</span>
           </div>
         </div>
-        <input type="range" min="200" max="3000" step="100" x-model.number="inp.annualIncome" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">
+        <input type="range" min="200" max="3000" step="100" x-model.number="inp.annualIncome" @input="update()" aria-label="年収（給与所得者）" />
+        <p class="text-[11px] text-slate-500 text-right">
           限界税率 <span class="font-semibold text-slate-600" x-text="res.taxSaving.marginalTaxRate"></span>%
-          <span class="text-slate-300 mx-1">·</span>所得税 <span x-text="res.taxSaving.marginalTaxRate - 10"></span>% + 住民税 10%
+          <span class="text-slate-400 mx-1">·</span>所得税 <span x-text="res.taxSaving.marginalTaxRate - 10"></span>% + 住民税 10%
         </p>
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs text-slate-500 block">申告種別</label>
-        <select x-model="inp.filingType" @change="update()" class="sel">
+        <label for="filingType" class="text-xs text-slate-500 block">申告種別</label>
+        <select id="filingType" x-model="inp.filingType" @change="update()" class="sel">
           <option value="blue65">青色申告（65万円控除）</option>
           <option value="blue10">青色申告（10万円控除）</option>
           <option value="white">白色申告</option>
@@ -352,18 +354,18 @@ app.get("/", (c) => {
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">建物割合（減価償却用）</label>
+          <label for="buildingRatio" class="text-xs text-slate-500">建物割合（減価償却用）</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="5" min="0" max="100" x-model.number="inp.buildingRatio" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="buildingRatio" type="number" step="5" min="0" max="100" x-model.number="inp.buildingRatio" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="20" max="90" step="5" x-model.number="inp.buildingRatio" @input="update()" />
+        <input type="range" min="20" max="90" step="5" x-model.number="inp.buildingRatio" @input="update()" aria-label="建物割合（減価償却用）" />
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs text-slate-500 block">物件種別</label>
-        <select x-model="inp.propertyType" @change="update()" class="sel">
+        <label for="propertyType" class="text-xs text-slate-500 block">物件種別</label>
+        <select id="propertyType" x-model="inp.propertyType" @change="update()" class="sel">
           <option value="detached">戸建て</option>
           <option value="apartmentWhole">一棟アパート・マンション</option>
           <option value="mansionUnit">区分マンション</option>
@@ -374,8 +376,8 @@ app.get("/", (c) => {
       </div>
 
       <div class="space-y-2">
-        <label class="text-xs text-slate-500 block">構造種別</label>
-        <select x-model="inp.structureType" @change="update()" class="sel">
+        <label for="structureType" class="text-xs text-slate-500 block">構造種別</label>
+        <select id="structureType" x-model="inp.structureType" @change="update()" class="sel">
           <option value="wood">木造（法定22年）</option>
           <option value="lightSteel">軽量鉄骨造（法定27年）</option>
           <option value="heavySteel">重量鉄骨造（法定34年）</option>
@@ -385,37 +387,37 @@ app.get("/", (c) => {
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">築年数（購入時）</label>
+          <label for="buildingAge" class="text-xs text-slate-500">築年数（購入時）</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="1" min="0" max="100" x-model.number="inp.buildingAge" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">年</span>
+            <input id="buildingAge" type="number" step="1" min="0" max="100" x-model.number="inp.buildingAge" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">年</span>
           </div>
         </div>
-        <input type="range" min="0" max="50" step="1" x-model.number="inp.buildingAge" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">残存耐用年数 <span class="font-semibold text-slate-600" x-text="res.taxSaving.remainingUsefulLife"></span> 年</p>
+        <input type="range" min="0" max="50" step="1" x-model.number="inp.buildingAge" @input="update()" aria-label="築年数（購入時）" />
+        <p class="text-[11px] text-slate-500 text-right">残存耐用年数 <span class="font-semibold text-slate-600" x-text="res.taxSaving.remainingUsefulLife"></span> 年</p>
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">売却想定年</label>
+          <label for="sellYear" class="text-xs text-slate-500">売却想定年</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="1" min="1" max="50" x-model.number="inp.sellYear" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-8">年後</span>
+            <input id="sellYear" type="number" step="1" min="1" max="50" x-model.number="inp.sellYear" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-8">年後</span>
           </div>
         </div>
-        <input type="range" min="1" max="30" step="1" x-model.number="inp.sellYear" @input="update()" />
+        <input type="range" min="1" max="30" step="1" x-model.number="inp.sellYear" @input="update()" aria-label="売却想定年" />
       </div>
 
       <div class="space-y-2">
         <div class="flex items-center justify-between">
-          <label class="text-xs text-slate-500">売却時諸費用率</label>
+          <label for="saleExpenseRate" class="text-xs text-slate-500">売却時諸費用率</label>
           <div class="flex items-center gap-1.5">
-            <input type="number" step="0.5" min="0" x-model.number="inp.saleExpenseRate" @change="update()" class="ni" />
-            <span class="text-xs text-slate-400 w-4">%</span>
+            <input id="saleExpenseRate" type="number" step="0.5" min="0" x-model.number="inp.saleExpenseRate" @change="update()" class="ni" />
+            <span class="text-xs text-slate-500 w-4">%</span>
           </div>
         </div>
-        <input type="range" min="2" max="8" step="0.5" x-model.number="inp.saleExpenseRate" @input="update()" />
-        <p class="text-[11px] text-slate-400 text-right">仲介手数料3%+消費税+諸費用の目安</p>
+        <input type="range" min="2" max="8" step="0.5" x-model.number="inp.saleExpenseRate" @input="update()" aria-label="売却時諸費用率" />
+        <p class="text-[11px] text-slate-500 text-right">仲介手数料3%+消費税+諸費用の目安</p>
       </div>
 
     </div>
@@ -428,43 +430,43 @@ app.get("/", (c) => {
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-3">月次CF</div>
-          <div class="text-2xl font-bold leading-none" :class="res.monthly.monthlyCF >= 0 ? 'text-emerald-600' : 'text-rose-600'">
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-3">月次CF</div>
+          <div class="text-2xl font-bold leading-none" :class="res.monthly.monthlyCF >= 0 ? 'text-emerald-700' : 'text-rose-600'">
             <span x-text="(res.monthly.monthlyCF >= 0 ? '+' : '') + res.monthly.monthlyCF.toFixed(2)"></span>
           </div>
-          <div class="text-[11px] text-slate-400 mt-2">万円 / 初年度</div>
+          <div class="text-[11px] text-slate-500 mt-2">万円 / 初年度</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-3" x-text="res.taxSaving.annualTaxEffect >= 0 ? '年間節税額' : '年間税負担増'"></div>
-          <div class="text-2xl font-bold leading-none" :class="res.taxSaving.annualTaxEffect >= 0 ? 'text-sky-600' : 'text-amber-600'">
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-3" x-text="res.taxSaving.annualTaxEffect >= 0 ? '年間節税額' : '年間税負担増'"></div>
+          <div class="text-2xl font-bold leading-none" :class="res.taxSaving.annualTaxEffect >= 0 ? 'text-sky-700' : 'text-amber-700'">
             <span x-text="(res.taxSaving.annualTaxEffect >= 0 ? '+' : '') + res.taxSaving.annualTaxEffect.toFixed(1)"></span>
           </div>
-          <div class="text-[11px] text-slate-400 mt-2">万円 / 初年度</div>
+          <div class="text-[11px] text-slate-500 mt-2">万円 / 初年度</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-3">実質利回り</div>
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-3">実質利回り</div>
           <div class="text-2xl font-bold leading-none text-slate-800">
             <span x-text="(inp.propertyPrice > 0 ? ((res.monthly.effectiveRent - res.monthly.operatingExpense) * 12 / inp.propertyPrice * 100).toFixed(2) : '0.00')"></span>
           </div>
-          <div class="text-[11px] text-slate-400 mt-2">% / 初年度</div>
+          <div class="text-[11px] text-slate-500 mt-2">% / 初年度</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-3"><span x-text="inp.sellYear + '年後'"></span> 総収益</div>
-          <div class="text-2xl font-bold leading-none" :class="res.exit.totalReturn >= 0 ? 'text-emerald-600' : 'text-rose-600'">
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-3"><span x-text="inp.sellYear + '年後'"></span> 総収益</div>
+          <div class="text-2xl font-bold leading-none" :class="res.exit.totalReturn >= 0 ? 'text-emerald-700' : 'text-rose-600'">
             <span x-text="(res.exit.totalReturn >= 0 ? '+' : '') + res.exit.totalReturn.toFixed(1)"></span>
           </div>
-          <div class="text-[11px] text-slate-400 mt-2">万円 累積CF＋売却手残</div>
+          <div class="text-[11px] text-slate-500 mt-2">万円 累積CF＋売却手残</div>
         </div>
 
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-3">IRR</div>
-          <div class="text-2xl font-bold leading-none" :class="res.exit.irr === null ? 'text-slate-300' : res.exit.irr >= 0 ? 'text-emerald-600' : 'text-rose-600'">
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-3">IRR</div>
+          <div class="text-2xl font-bold leading-none" :class="res.exit.irr === null ? 'text-slate-300' : res.exit.irr >= 0 ? 'text-emerald-700' : 'text-rose-600'">
             <span x-text="res.exit.irr === null ? '−' : (res.exit.irr >= 0 ? '+' : '') + res.exit.irr.toFixed(1) + '%'"></span>
           </div>
-          <div class="text-[11px] text-slate-400 mt-2">内部収益率</div>
+          <div class="text-[11px] text-slate-500 mt-2">内部収益率</div>
         </div>
 
       </div>
@@ -474,25 +476,25 @@ app.get("/", (c) => {
 
         <!-- 月次収支内訳 -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-4">月次収支内訳（初年度）</div>
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-4">月次収支内訳（初年度）</div>
 
-          <div class="text-[10px] font-bold tracking-[0.12em] text-slate-300 uppercase mb-1.5">収入</div>
+          <div class="text-[10px] font-bold tracking-[0.12em] text-slate-500 uppercase mb-1.5">収入</div>
           <dl class="space-y-1.5 text-sm mb-3">
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">表面家賃収入</dt>
               <dd class="font-semibold text-slate-600">+<span x-text="(inp.propertyPrice * inp.grossYield / 100 / 12).toFixed(2)"></span> 万円</dd>
             </div>
             <div class="flex justify-between items-baseline pl-3">
-              <dt class="text-xs text-slate-400">└ 空室控除（<span x-text="inp.vacancyRate"></span>%）</dt>
-              <dd class="text-xs text-rose-400">−<span x-text="(inp.propertyPrice * inp.grossYield / 100 / 12 * inp.vacancyRate / 100).toFixed(2)"></span> 万円</dd>
+              <dt class="text-xs text-slate-500">└ 空室控除（<span x-text="inp.vacancyRate"></span>%）</dt>
+              <dd class="text-xs text-rose-600">−<span x-text="(inp.propertyPrice * inp.grossYield / 100 / 12 * inp.vacancyRate / 100).toFixed(2)"></span> 万円</dd>
             </div>
             <div class="flex justify-between items-baseline border-t border-slate-50 pt-1.5">
               <dt class="text-slate-600 font-medium">実質家賃収入</dt>
-              <dd class="font-semibold text-emerald-600">+<span x-text="res.monthly.effectiveRent.toFixed(2)"></span> 万円</dd>
+              <dd class="font-semibold text-emerald-700">+<span x-text="res.monthly.effectiveRent.toFixed(2)"></span> 万円</dd>
             </div>
           </dl>
 
-          <div class="text-[10px] font-bold tracking-[0.12em] text-slate-300 uppercase mb-1.5">支出</div>
+          <div class="text-[10px] font-bold tracking-[0.12em] text-slate-500 uppercase mb-1.5">支出</div>
           <dl class="space-y-1.5 text-sm mb-3">
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">ローン返済</dt>
@@ -513,21 +515,21 @@ app.get("/", (c) => {
           </dl>
 
           <div class="flex justify-between items-baseline border-t border-slate-200 pt-3">
-            <dt class="font-semibold text-slate-700">月次CF</dt>
-            <dd class="font-bold text-base" :class="res.monthly.monthlyCF >= 0 ? 'text-emerald-600' : 'text-rose-600'">
+            <span class="font-semibold text-slate-700">月次CF</span>
+            <span class="font-bold text-base" :class="res.monthly.monthlyCF >= 0 ? 'text-emerald-700' : 'text-rose-600'">
               <span x-text="(res.monthly.monthlyCF >= 0 ? '+' : '') + res.monthly.monthlyCF.toFixed(2)"></span> 万円
-            </dd>
+            </span>
           </div>
-          <p class="text-[11px] text-slate-400 mt-3 pt-2.5 border-t border-slate-50">借入額 <span class="font-semibold text-slate-500" x-text="res.monthly.loanAmount.toLocaleString()"></span> 万円</p>
+          <p class="text-[11px] text-slate-500 mt-3 pt-2.5 border-t border-slate-50">借入額 <span class="font-semibold text-slate-600" x-text="res.monthly.loanAmount.toLocaleString()"></span> 万円</p>
         </div>
 
         <!-- 節税内訳 -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-4">節税内訳（初年度）</div>
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-4">節税内訳（初年度）</div>
           <dl class="space-y-2.5 text-sm">
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">法定 / 残存耐用年数</dt>
-              <dd class="font-semibold text-slate-700"><span x-text="res.taxSaving.legalUsefulLife"></span> 年 / <span class="text-sky-600" x-text="res.taxSaving.remainingUsefulLife"></span> 年</dd>
+              <dd class="font-semibold text-slate-700"><span x-text="res.taxSaving.legalUsefulLife"></span> 年 / <span class="text-sky-700" x-text="res.taxSaving.remainingUsefulLife"></span> 年</dd>
             </div>
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">年間減価償却費</dt>
@@ -539,17 +541,17 @@ app.get("/", (c) => {
             </div>
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">不動産所得（初年）</dt>
-              <dd class="font-semibold" :class="res.taxSaving.realEstateIncome < 0 ? 'text-emerald-600' : 'text-slate-700'">
+              <dd class="font-semibold" :class="res.taxSaving.realEstateIncome < 0 ? 'text-emerald-700' : 'text-slate-700'">
                 <span x-text="res.taxSaving.realEstateIncome.toFixed(1)"></span> 万円
               </dd>
             </div>
             <div class="flex justify-between items-baseline pl-3" x-show="res.taxSaving.filingDeduction > 0">
-              <dt class="text-xs text-slate-400">└ 申告特別控除</dt>
-              <dd class="text-xs text-sky-600">−<span x-text="res.taxSaving.filingDeduction"></span> 万円</dd>
+              <dt class="text-xs text-slate-500">└ 申告特別控除</dt>
+              <dd class="text-xs text-sky-700">−<span x-text="res.taxSaving.filingDeduction"></span> 万円</dd>
             </div>
             <div class="flex justify-between items-baseline border-t border-slate-100 pt-2.5">
               <dt class="font-semibold text-slate-700" x-text="res.taxSaving.annualTaxEffect >= 0 ? '年間節税額（初年）' : '年間税負担増（初年）'"></dt>
-              <dd class="font-bold" :class="res.taxSaving.annualTaxEffect >= 0 ? 'text-sky-600' : 'text-amber-600'">
+              <dd class="font-bold" :class="res.taxSaving.annualTaxEffect >= 0 ? 'text-sky-700' : 'text-amber-700'">
                 <span x-text="(res.taxSaving.annualTaxEffect >= 0 ? '+' : '') + res.taxSaving.annualTaxEffect.toFixed(1)"></span> 万円
               </dd>
             </div>
@@ -558,7 +560,7 @@ app.get("/", (c) => {
 
         <!-- 売却内訳 -->
         <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-4" x-text="inp.sellYear + '年後 売却内訳'"></div>
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-4" x-text="inp.sellYear + '年後 売却内訳'"></div>
           <dl class="space-y-2.5 text-sm">
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500" x-text="inp.sellYear + '年後 売却価格'"></dt>
@@ -570,19 +572,19 @@ app.get("/", (c) => {
             </div>
             <div class="flex justify-between items-baseline" x-show="res.exit.reserveAtSale > 0">
               <dt class="text-slate-500">積立残高（回収）</dt>
-              <dd class="font-semibold text-emerald-600">+<span x-text="res.exit.reserveAtSale.toFixed(0)"></span> 万円</dd>
+              <dd class="font-semibold text-emerald-700">+<span x-text="res.exit.reserveAtSale.toFixed(0)"></span> 万円</dd>
             </div>
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">取得費（減価償却後）</dt>
               <dd class="font-semibold text-slate-700"><span x-text="res.exit.adjustedAcquisitionCost.toFixed(0)"></span> 万円</dd>
             </div>
             <div class="flex justify-between items-baseline pl-3">
-              <dt class="text-xs text-slate-400">└ 減価償却累計（控除）</dt>
-              <dd class="text-xs text-amber-600">−<span x-text="res.exit.accumulatedDepreciation.toFixed(0)"></span> 万円</dd>
+              <dt class="text-xs text-slate-500">└ 減価償却累計（控除）</dt>
+              <dd class="text-xs text-amber-700">−<span x-text="res.exit.accumulatedDepreciation.toFixed(0)"></span> 万円</dd>
             </div>
             <div class="flex justify-between items-baseline">
               <dt class="text-slate-500">譲渡益</dt>
-              <dd class="font-semibold" :class="res.exit.capitalGain >= 0 ? 'text-emerald-600' : 'text-slate-500'">
+              <dd class="font-semibold" :class="res.exit.capitalGain >= 0 ? 'text-emerald-700' : 'text-slate-500'">
                 <span x-text="res.exit.capitalGain.toFixed(0)"></span> 万円
               </dd>
             </div>
@@ -592,7 +594,7 @@ app.get("/", (c) => {
             </div>
             <div class="flex justify-between items-baseline border-t border-slate-100 pt-2.5">
               <dt class="font-semibold text-slate-700">売却手残り</dt>
-              <dd class="font-bold text-base" :class="res.exit.netSaleProceeds >= 0 ? 'text-emerald-600' : 'text-rose-600'">
+              <dd class="font-bold text-base" :class="res.exit.netSaleProceeds >= 0 ? 'text-emerald-700' : 'text-rose-600'">
                 <span x-text="res.exit.netSaleProceeds.toFixed(0)"></span> 万円
               </dd>
             </div>
@@ -603,23 +605,23 @@ app.get("/", (c) => {
 
       <!-- グラフ -->
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
-        <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-4">30年間の推移</div>
+        <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-4">30年間の推移</div>
         <canvas id="mainChart" height="210"></canvas>
       </div>
 
       <!-- 修繕スケジュール -->
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
         <div class="flex items-center justify-between mb-4">
-          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400">修繕スケジュール（30年間）</div>
-          <span class="text-[11px] text-slate-400">築年数・構造種別から自動算出。高築年ほどコスト増（最大1.6倍）</span>
+          <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500">修繕スケジュール（30年間）</div>
+          <span class="text-[11px] text-slate-500">築年数・構造種別から自動算出。高築年ほどコスト増（最大1.6倍）</span>
         </div>
         <template x-if="res.yearly.filter(y => y.repairCost > 0).length === 0">
-          <p class="text-xs text-slate-400 text-center py-4">30年以内に修繕予定なし</p>
+          <p class="text-xs text-slate-500 text-center py-4">30年以内に修繕予定なし</p>
         </template>
         <div class="overflow-x-auto" x-show="res.yearly.filter(y => y.repairCost > 0).length > 0">
           <table class="w-full text-xs text-right">
             <thead>
-              <tr class="text-slate-400 border-b border-slate-100">
+              <tr class="text-slate-500 border-b border-slate-100">
                 <th class="text-left pb-2.5 font-medium">時期</th>
                 <th class="pb-2.5 font-medium">修繕種別</th>
                 <th class="pb-2.5 font-medium">予定費用</th>
@@ -634,7 +636,7 @@ app.get("/", (c) => {
                   <td class="py-2 text-left font-semibold text-slate-700" x-text="y.year + '年後'"></td>
                   <td class="py-2 font-medium text-slate-600" x-text="y.repairType"></td>
                   <td class="py-2 text-slate-600" x-text="y.repairCost.toFixed(0) + '万円'"></td>
-                  <td class="py-2 text-sky-600" x-text="(y.reserveBalance + (y.repairCost - y.repairOutOfPocket)).toFixed(0) + '万円'"></td>
+                  <td class="py-2 text-sky-700" x-text="(y.reserveBalance + (y.repairCost - y.repairOutOfPocket)).toFixed(0) + '万円'"></td>
                   <td class="py-2" :class="y.repairOutOfPocket > 0 ? 'text-rose-600 font-semibold' : 'text-slate-300'"
                     x-text="y.repairOutOfPocket > 0 ? '−' + y.repairOutOfPocket.toFixed(0) + '万円' : '−'"></td>
                   <td class="py-2 text-center">
@@ -650,10 +652,10 @@ app.get("/", (c) => {
 
       <!-- 年次テーブル -->
       <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5 overflow-x-auto">
-        <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-400 mb-4">年次詳細</div>
+        <div class="text-[10px] font-bold tracking-[0.14em] uppercase text-slate-500 mb-4">年次詳細</div>
         <table class="w-full text-xs text-right">
           <thead>
-            <tr class="text-slate-400 border-b border-slate-100">
+            <tr class="text-slate-500 border-b border-slate-100">
               <th class="text-left pb-2.5 font-medium">年</th>
               <th class="pb-2.5 font-medium">年次CF</th>
               <th class="pb-2.5 font-medium">税効果</th>
@@ -668,25 +670,25 @@ app.get("/", (c) => {
               <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors"
                 :class="y.year === inp.sellYear ? 'bg-emerald-50/60' : ''">
                 <td class="py-2 text-left font-bold text-slate-700" x-text="y.year + '年'"></td>
-                <td class="py-2 font-semibold" :class="y.annualCF >= 0 ? 'text-emerald-600' : 'text-rose-600'"
+                <td class="py-2 font-semibold" :class="y.annualCF >= 0 ? 'text-emerald-700' : 'text-rose-600'"
                   x-text="(y.annualCF >= 0 ? '+' : '') + y.annualCF.toFixed(1)"></td>
-                <td class="py-2" :class="y.taxEffect >= 0 ? 'text-sky-600' : 'text-amber-600'"
+                <td class="py-2" :class="y.taxEffect >= 0 ? 'text-sky-700' : 'text-amber-700'"
                   x-text="(y.taxEffect >= 0 ? '+' : '') + y.taxEffect.toFixed(1)"></td>
                 <td class="py-2 text-slate-500" x-text="y.reserveBalance.toFixed(1)"></td>
                 <td class="py-2 text-center">
-                  <template x-if="y.repairCost === 0"><span class="text-slate-200">−</span></template>
+                  <template x-if="y.repairCost === 0"><span class="text-slate-300">−</span></template>
                   <template x-if="y.repairCost > 0">
                     <div>
                       <span class="font-semibold" :class="y.repairOutOfPocket > 0 ? 'text-rose-600' : 'text-slate-600'" x-text="y.repairType"></span>
-                      <span class="block text-[10px] text-slate-400"
+                      <span class="block text-[10px] text-slate-500"
                         x-text="y.repairOutOfPocket > 0 ? '不足 −' + y.repairOutOfPocket.toFixed(0) + '万' : '積立内(' + y.repairCost.toFixed(0) + '万)'"></span>
                     </div>
                   </template>
                 </td>
-                <td class="py-2 font-semibold" :class="y.netCumulativeCF >= 0 ? 'text-emerald-600' : 'text-rose-600'"
+                <td class="py-2 font-semibold" :class="y.netCumulativeCF >= 0 ? 'text-emerald-700' : 'text-rose-600'"
                   x-text="y.netCumulativeCF.toFixed(1)"></td>
                 <td class="py-2 font-semibold" x-text="calcExitForYear(y.year).toFixed(1)"
-                  :class="calcExitForYear(y.year) >= 0 ? 'text-emerald-600' : 'text-rose-600'"></td>
+                  :class="calcExitForYear(y.year) >= 0 ? 'text-emerald-700' : 'text-rose-600'"></td>
               </tr>
             </template>
           </tbody>
@@ -695,7 +697,7 @@ app.get("/", (c) => {
 
     </div>
   </div>
-</div>
+</main>
 
 <script>
   let _chart = null;
