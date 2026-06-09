@@ -51,8 +51,8 @@ app.get("/", (c) => {
   <meta name="twitter:title" content="不動産投資シミュレーター" />
   <meta name="twitter:description" content="月次CF・節税・売却まで無料で試算できる不動産投資シミュレーター。" />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="preconnect" href="https://cdn.tailwindcss.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="stylesheet" href="/assets/style.css" />
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -65,7 +65,6 @@ app.get("/", (c) => {
     "inLanguage": "ja"
   }
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
   <script defer src="/assets/client.js"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3/dist/cdn.min.js"></script>
@@ -143,7 +142,7 @@ app.get("/", (c) => {
     }
   </style>
 </head>
-<body x-data="simApp()" x-cloak>
+<body x-data="simApp()">
 
 <main class="max-w-7xl mx-auto px-6 py-10">
 

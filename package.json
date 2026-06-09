@@ -3,7 +3,8 @@
   "type": "module",
   "scripts": {
     "dev": "npm run build:client && tsx watch src/node-server.ts",
-    "build:client": "vite build --mode client",
+    "build:css": "tailwindcss -i ./src/style.css -o ./public/assets/style.css --minify",
+    "build:client": "npm run build:css && vite build --mode client",
     "build": "npm run build:client && vite build",
     "preview": "wrangler pages dev ./dist"
   },
@@ -14,6 +15,8 @@
   "devDependencies": {
     "@hono/node-server": "^1.19.14",
     "@hono/vite-cloudflare-pages": "^0.4",
+    "@tailwindcss/cli": "^4.3.0",
+    "tailwindcss": "^4.3.0",
     "tsx": "^4.22.4",
     "typescript": "^5",
     "vite": "^5"

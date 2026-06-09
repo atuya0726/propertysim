@@ -4,6 +4,7 @@ node_modules/
 # Build outputs
 dist/
 public/assets/client.js
+public/assets/style.css
 
 # Wrangler / Cloudflare
 .wrangler/
