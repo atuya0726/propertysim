@@ -57,6 +57,7 @@ app.get("/", (c) => {
 
   const result: SimResult = simulate(input);
 
+  const defaultJson = JSON.stringify(DEFAULT_INPUT);
   const inputJson = JSON.stringify(input);
   const resultJson = JSON.stringify(result);
 
@@ -724,6 +725,7 @@ app.get("/", (c) => {
 
 <script>
   let _chart = null;
+  const DEFAULTS = ${raw(defaultJson)};
 
   function simApp() {
     const initialInput = ${raw(inputJson)};
@@ -744,10 +746,12 @@ app.get("/", (c) => {
       },
 
       _syncUrl() {
-        const params = new URLSearchParams(
-          Object.entries(this.inp).map(([k, v]) => [k, String(v)])
-        );
-        history.replaceState(null, '', '?' + params.toString());
+        const params = new URLSearchParams();
+        for (const [k, v] of Object.entries(this.inp)) {
+          if (v !== DEFAULTS[k]) params.set(k, String(v));
+        }
+        const qs = params.toString();
+        history.replaceState(null, '', qs ? '?' + qs : location.pathname);
       },
 
       calcExitForYear(year) {
