@@ -30,7 +30,31 @@ const DEFAULT_INPUT: SimInput = {
 };
 
 app.get("/", (c) => {
-  const input = DEFAULT_INPUT;
+  const input: SimInput = { ...DEFAULT_INPUT };
+  const q = c.req.query();
+
+  for (const key of [
+    'propertyPrice', 'equity', 'interestRate', 'loanYears', 'grossYield',
+    'vacancyRate', 'rentDeclineRate', 'managementFeeRate', 'propertyTax', 'insurance',
+    'otherExpenseRate', 'monthlyRepairReserve', 'acquisitionExpenseRate', 'saleExpenseRate',
+    'annualIncome', 'buildingRatio', 'buildingAge', 'sellYear',
+  ] as const) {
+    const raw = q[key];
+    if (raw !== undefined) {
+      const v = Number(raw);
+      if (!isNaN(v)) input[key] = v;
+    }
+  }
+  if (q.propertyType === 'detached' || q.propertyType === 'apartmentWhole' || q.propertyType === 'mansionUnit') {
+    input.propertyType = q.propertyType;
+  }
+  if (q.filingType === 'blue65' || q.filingType === 'blue10' || q.filingType === 'white') {
+    input.filingType = q.filingType;
+  }
+  if (q.structureType === 'wood' || q.structureType === 'lightSteel' || q.structureType === 'heavySteel' || q.structureType === 'rc') {
+    input.structureType = q.structureType;
+  }
+
   const result: SimResult = simulate(input);
 
   const inputJson = JSON.stringify(input);
@@ -715,7 +739,15 @@ app.get("/", (c) => {
 
       update() {
         this.res = window.simulate(this.inp);
+        this._syncUrl();
         this._updateChart();
+      },
+
+      _syncUrl() {
+        const params = new URLSearchParams(
+          Object.entries(this.inp).map(([k, v]) => [k, String(v)])
+        );
+        history.replaceState(null, '', '?' + params.toString());
       },
 
       calcExitForYear(year) {
